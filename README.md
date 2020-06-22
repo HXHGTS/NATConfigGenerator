@@ -8,3 +8,9 @@ vi nat.sh
 :set ff=unix
 
 ### 转换编码后才可以作为linux脚本运行！
+
+生成的nat.sh运行方式：
+
+chmod +x nat.sh
+
+bash nat.sh
