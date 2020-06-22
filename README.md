@@ -1,5 +1,5 @@
 # NATConfigGenerator
-Windows下执行的NAT跳转服务器端口转发tcp/udp配置工具
+Windows下生成NAT跳转服务器端口转发配置工具，NAT服务器系统必须为Linux系统！
 
 ### 警告：软件生成的nat.sh脚本需要先在linux下使用以下命令：
 
