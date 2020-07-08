@@ -16,7 +16,7 @@ int main() {
 		printf("请输入端口号间隔:");
 		scanf("%d", &PortGap);
 		printf("\n");
-		printf("请输入远程服务器ip，如8.8.8.8请写为8 8 8 8:");
+		printf("请输入远程服务器ip，注意中间点改成空格，如8.8.8.8请写为8 8 8 8:");
 		scanf("%d %d %d %d", &ip1, &ip2, &ip3, &ip4);
 		printf("\n");
 		printf("请输入转发协议(t=tcp or u=udp):");
@@ -28,8 +28,9 @@ int main() {
 		else {
 			NATProtocol();
 			if (mode == 1) {
-				system( "sudo systemctl start firewalld.service\n");
+				system( "sudo systemctl start firewalld.service");
 				AddNAT();
+				system("sudo systemctl enable firewalld.service");
 				printf("\n\n");
 				printf("执行完成!\n");
 			}
@@ -42,14 +43,21 @@ int main() {
 			printf("执行完成！\n");
 		}
 	}
-	else {
+	else if(mode==3) {
 		CheckNAT();
+	}
+	else {
+		system("sudo yum install firewalld firewall-config -y");
+		system("sudo systemctl start firewalld.service");
+		system("sudo systemctl enable firewalld.service");
+		printf("执行完成！\n");
 	}
 	return 0;
 }
 
 int UI() {
-	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询转发规则\n\n请输入：");
+	printf("请注意：本软件仅支持CentOS系统，其它Linux系统不支持！\n\n");
+	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询转发规则\n\n4.安装firewalld(针对部分精简系统，或者CentOS7以下版本)\n\n请输入：");
 	scanf("%d", &mode);
 	printf("\n");
 	return 0;
@@ -70,13 +78,13 @@ int AddNAT() {
 
 int DelNAT(){
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
-		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --remove-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d\n", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
+		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --remove-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
 		system(cmd);
-		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --remove-port %d/%s\n", NATPort,protocol);
+		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --remove-port %d/%s", NATPort,protocol);
 		system(cmd);
 	}
-	system("sudo firewall-cmd --reload\n");
-	system("sudo firewall-cmd --list-all\n");
+	system("sudo firewall-cmd --reload");
+	system("sudo firewall-cmd --list-all");
 	return 0;
 }
 
