@@ -3,7 +3,11 @@ NAT跳转服务器端口转发配置工具，适用于流量中转，基于firew
 
 运行方式：
 
-wget https://github.com/HXHGTS/NATConfigGenerator/raw/master/NATGenerator
+yum install -y wget gcc
+
+wget https://github.com/HXHGTS/NATConfigGenerator/raw/master/NATGenerator.c
+
+gcc -o NATGenerator NATGenerator.c
 
 ./NATGenerator
 
