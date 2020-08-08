@@ -11,8 +11,10 @@ echo "52.78.231.108 github.com" >> /etc/hosts
 
 wget https://github.com/HXHGTS/NATConfigGenerator/raw/master/NATGenerator.c
 
+sudo chmod +x NATGenerator.c
+
 gcc -o NATGenerator NATGenerator.c
 
-./NATGenerator
+sudo ./NATGenerator
 ```
 将考虑加入iptables支持
