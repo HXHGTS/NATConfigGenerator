@@ -7,9 +7,9 @@ char cmd[200], protocol[5];
 int main() {
 	UI();
 	if (mode == 1) {
-		system("sudo yum install firewalld firewall-config -y");
-		system("sudo systemctl start firewalld.service");
-		system("sudo systemctl enable firewalld.service");
+		system("yum install firewalld firewall-config -y");
+		system("systemctl start firewalld.service");
+		system("systemctl enable firewalld.service");
 		printf("执行完成！\n");
 	}
 	else if (mode == 2 || mode == 3) {
@@ -75,8 +75,8 @@ int main() {
 		CheckNAT();
 	}
 	else {
-		system("sudo systemctl stop firewalld.service");
-		system("sudo systemctl disable firewalld.service");
+		system("systemctl stop firewalld.service");
+		system("systemctl disable firewalld.service");
 		printf("执行完成！\n");
 	}
 	return 0;
@@ -92,32 +92,32 @@ int UI() {
 
 int AddNAT() {
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
-		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --add-port %d/%s", NATPort,protocol);
+		sprintf(cmd, "firewall-cmd --zone=public --permanent --add-port %d/%s", NATPort,protocol);
 		system(cmd);
-		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --add-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
+		sprintf(cmd, "firewall-cmd --zone=public --permanent --add-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
 		system(cmd);
 	}
-	system("sudo firewall-cmd --zone=public --permanent --add-masquerade");
-	system("sudo firewall-cmd --reload");
-	system("sudo firewall-cmd --list-all");
+	system("firewall-cmd --zone=public --permanent --add-masquerade");
+	system("firewall-cmd --reload");
+	system("firewall-cmd --list-all");
 	return 0;
 }
 
 int DelNAT(){
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
-		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --remove-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
+		sprintf(cmd, "firewall-cmd --zone=public --permanent --remove-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
 		system(cmd);
-		sprintf(cmd, "sudo firewall-cmd --zone=public --permanent --remove-port %d/%s", NATPort,protocol);
+		sprintf(cmd, "firewall-cmd --zone=public --permanent --remove-port %d/%s", NATPort,protocol);
 		system(cmd);
 	}
-	system("sudo firewall-cmd --reload");
-	system("sudo firewall-cmd --list-all");
+	system("firewall-cmd --reload");
+	system("firewall-cmd --list-all");
 	return 0;
 }
 
 int CheckNAT() {
 	printf("系统NAT设置记录:\n\n");
-	system("sudo firewall-cmd --list-all");
+	system("firewall-cmd --list-all");
 	printf("\n");
 	return 0;
 }
@@ -125,16 +125,16 @@ int CheckNAT() {
 int PortOpen() {
 	sprintf(cmd, "firewall-cmd --zone=public --add-port=%d/%s --permanent", OpenPort, protocol);
 	system(cmd);
-	system("sudo firewall-cmd --reload");
-	system("sudo firewall-cmd --list-all");
+	system("firewall-cmd --reload");
+	system("firewall-cmd --list-all");
 	return 0;
 }
 
 int PortClose() {
 	sprintf(cmd, "firewall-cmd --zone=public --remove-port=%d/%s --permanent", OpenPort, protocol);
 	system(cmd);
-	system("sudo firewall-cmd --reload");
-	system("sudo firewall-cmd --list-all");
+	system("firewall-cmd --reload");
+	system("firewall-cmd --list-all");
 	return 0;
 }
 
