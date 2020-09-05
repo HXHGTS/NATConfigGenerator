@@ -57,7 +57,7 @@ int main() {
 
 int UI() {
 	printf("请注意：本软件仅支持CentOS系统，其它Linux系统不支持！\n\n");
-	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询转发规则\n\n4.安装firewalld(针对部分精简系统，或者CentOS7以下版本)\n\n请输入：");
+	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询转发规则\n\n4.安装firewalld(第一次使用建议执行，否则可能会转发失败)\n\n请输入：");
 	scanf("%d", &mode);
 	printf("\n");
 	return 0;
