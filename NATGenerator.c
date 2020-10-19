@@ -6,13 +6,10 @@ int ip1,ip2,ip3,ip4;
 char cmd[200], protocol[5];
 int main() {
 	UI();
-	if (mode == 1) {
-		system("yum install firewalld firewall-config -y");
-		system("systemctl start firewalld.service");
-		system("systemctl enable firewalld.service");
-		printf("执行完成！\n");
+	if (mode == 3) {
+		CheckNAT();
 	}
-	else if (mode == 2 || mode == 3) {
+	else if (mode == 1 || mode == 2) {
 		printf("请输入远程服务器起始端口号-终止端口号，如10000-20000:");
 		scanf("%d-%d", &ServerStartNum, &ServerEndNum);
 		printf("\n");
@@ -33,7 +30,7 @@ int main() {
 		}
 		else {
 			NATProtocol();
-			if (mode == 2) {
+			if (mode == 1) {
 				AddNAT();
 				printf("\n\n");
 				printf("执行完成!\n");
@@ -72,19 +69,25 @@ int main() {
 		}
 	}
 	else if (mode == 6) {
-		CheckNAT();
-	}
-	else {
 		system("systemctl stop firewalld.service");
 		system("systemctl disable firewalld.service");
 		printf("执行完成！\n");
+	}
+	else if (mode == 7) {
+		system("yum install firewalld firewall-config -y");
+		system("systemctl start firewalld.service");
+		system("systemctl enable firewalld.service");
+		printf("执行完成！\n");
+	}
+	else{
+		exit(0);
 	}
 	return 0;
 }
 
 int UI() {
 	printf("请注意：本软件仅支持CentOS系统，其它Linux系统不支持！\n\n");
-	printf("请选择要执行的操作：\n\n1.安装并开启firewalld(第一次使用建议执行，否则可能会转发失败)\n\n2.添加转发规则\n\n3.删除转发规则\n\n4.开放特定端口\n\n5.删除特定端口\n\n6.查询转发规则\n\n7.关闭firewalld\n\n请输入：");
+	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询转发规则\n\n4.开放特定端口\n\n5.删除特定端口\n\n6.关闭firewalld\n\n7.安装并开启firewalld(第一次使用建议执行，否则可能会转发失败)\n\n0.退出\n\n请输入：");
 	scanf("%d", &mode);
 	printf("\n");
 	return 0;
