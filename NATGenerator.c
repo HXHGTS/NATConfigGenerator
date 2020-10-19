@@ -143,7 +143,7 @@ int PortClose() {
 }
 
 int CheckInput() {
-	if (mode == 2 || mode == 3) {
+	if (mode == 1 || mode == 2) {
 		if (ServerStartNum > ServerEndNum || NATStartNum > NATEndNum || ServerStartNum > 65535 || ServerEndNum > 65535 || NATStartNum > 65535 || NATEndNum > 65535) {
 			return 1;
 		}
