@@ -5,6 +5,7 @@ int ServerStartNum, ServerEndNum, NATStartNum, NATEndNum, PortGap, ServerPort, N
 int ip1,ip2,ip3,ip4;
 char cmd[200], protocol[5];
 int main() {
+	system("clear");
 	UI();
 	if (mode == 3) {
 		CheckNAT();
