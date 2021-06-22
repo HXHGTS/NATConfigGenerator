@@ -2,8 +2,7 @@
 #include <stdlib.h>
 
 int ServerStartNum, ServerEndNum, NATStartNum, NATEndNum, PortGap, ServerPort, NATPort,OpenPort, mode, run;
-int ip1,ip2,ip3,ip4;
-char cmd[200], protocol[5];
+char cmd[200], protocol[5],remote_ip[16];
 int main() {
 	system("clear");
 	UI();
@@ -20,8 +19,8 @@ int main() {
 		printf("请输入端口号间隔:");
 		scanf("%d", &PortGap);
 		printf("\n");
-		printf("请输入远程服务器ip，注意中间点改成空格，如8.8.8.8请写为8 8 8 8:");
-		scanf("%d %d %d %d", &ip1, &ip2, &ip3, &ip4);
+		printf("请输入远程服务器ip，如8.8.8.8:");
+		scanf("%s", remote_ip);
 		printf("\n");
 		printf("请输入转发协议(t=tcp or u=udp):");
 		scanf("%s", protocol);
@@ -98,7 +97,7 @@ int AddNAT() {
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
 		sprintf(cmd, "firewall-cmd --zone=public --permanent --add-port %d/%s", NATPort,protocol);
 		system(cmd);
-		sprintf(cmd, "firewall-cmd --zone=public --permanent --add-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
+		sprintf(cmd, "firewall-cmd --zone=public --permanent --add-forward-port=port=%d:proto=%s:toport=%d:toaddr=%s", NATPort, protocol,ServerPort, remote_ip);
 		system(cmd);
 	}
 	system("firewall-cmd --zone=public --permanent --add-masquerade");
@@ -109,7 +108,7 @@ int AddNAT() {
 
 int DelNAT(){
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
-		sprintf(cmd, "firewall-cmd --zone=public --permanent --remove-forward-port=port=%d:proto=%s:toport=%d:toaddr=%d.%d.%d.%d", NATPort, protocol,ServerPort, ip1, ip2, ip3, ip4);
+		sprintf(cmd, "firewall-cmd --zone=public --permanent --remove-forward-port=port=%d:proto=%s:toport=%d:toaddr=%s", NATPort, protocol,ServerPort, remote_ip);
 		system(cmd);
 		sprintf(cmd, "firewall-cmd --zone=public --permanent --remove-port %d/%s", NATPort,protocol);
 		system(cmd);
